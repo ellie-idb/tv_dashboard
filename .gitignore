@@ -3,3 +3,4 @@ history.yml
 key.json
 api_keys.rb
 *.lock
+config.ru
