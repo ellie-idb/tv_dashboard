@@ -7,8 +7,6 @@ CITY_ID = 4487042
 # options: metric / imperial
 UNITS   = 'imperial'
 
-# create free account on open weather map to get API key
-
 SCHEDULER.every '20s', :first_in => 0 do |job|
 
   http = Net::HTTP.new('api.openweathermap.org')
@@ -23,7 +21,7 @@ SCHEDULER.every '20s', :first_in => 0 do |job|
   send_event('weather', { :temp => "#{current_temp} &deg;#{temperature_units}",
                           :condition => detailed_info['main'],
                           :title => "#{weather_data['name']} Weather",
-                          :color => color_temperature(current_temp),
+			  :color => 'metric'.eql?(UNITS) ? color_temperature_metric(current_temp) : color_temperature_imperial(current_temp),
                           :climacon => climacon_class(detailed_info['id'])})
 end
 
@@ -32,8 +30,8 @@ def temperature_units
   'metric'.eql?(UNITS) ? 'C' : 'F'
 end
 
-def color_temperature(temp_celsius)
-  case temp_celsius.to_i
+def color_temperature_imperial(temp)
+  case temp.to_i
   when 85..100
     '#FF3300'
   when 76..84
@@ -41,6 +39,21 @@ def color_temperature(temp_celsius)
   when 65..75
     '#FF9D00'
   when 41..64
+    '#18A9FF'
+  else
+    '#0065FF'
+  end
+end
+
+def color_temperature_metric(temp)
+  case temp.to_i
+  when 30..100
+    '#FF3300'
+  when 25..29
+    '#FF6000'
+  when 19..24
+    '#FF9D00'
+  when 5..18
     '#18A9FF'
   else
     '#0065FF'

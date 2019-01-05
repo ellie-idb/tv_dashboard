@@ -1,7 +1,7 @@
 require 'net/http'
 require_relative '../api_keys'
 
-# USA Only
+# set your zip code here..
 ZIP_CODE = 27603
 
 SCHEDULER.every '5m', :first_in => 0 do |job|

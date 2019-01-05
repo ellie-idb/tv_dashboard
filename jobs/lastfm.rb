@@ -2,6 +2,7 @@ require 'open-uri'
 require 'xmlsimple'
 require_relative '../api_keys'
 
+# change this to whatever your last.fm username is
 username = 'hatf0'
 
 SCHEDULER.every '10s', :first_in => 0 do |job|
@@ -16,8 +17,7 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
 		send_event('lastfm', { :status => failed })
 
 	else
-
-		user_id = XmlSimple.xml_in(response.body, { 'ForceArray' => false })['recenttracks']
+		# user_id = XmlSimple.xml_in(response.body, { 'ForceArray' => false })['recenttracks']
 		song = XmlSimple.xml_in(response.body, { 'ForceArray' => false })['recenttracks']['track'][0]
 
 		song['nowplaying'] == "true" ? track_status = "Now Playing" : track_status = "Last Played"

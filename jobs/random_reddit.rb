@@ -1,10 +1,12 @@
 require 'net/http'
 require 'json'
 
+# the placeholder.. is a placeholder lol
 placeholder = 'background-image:url(./assets/nyantocat.gif)'
+
+# set your widget event id as the first field, then the subreddit link as the second
 subreddits = {
   'demotivational' => '/r/demotivational/hot.json?limit=100',
-
 }
 
 SCHEDULER.every '20s', first_in: 0 do |job|
@@ -25,7 +27,6 @@ SCHEDULER.every '20s', first_in: 0 do |job|
 		    else
 			    urls = json['data']['children'].map{|child| child['data']['url'] }
 
-      # Ensure we're linking directly to an image, not a gallery etc.
 			    valid_urls = urls.select{|url| url.downcase.end_with?('png', 'gif', 'jpg', 'jpeg')}
 			    send_event(widget_event_id, image: "background-image:url(#{valid_urls.sample(1).first})")
 		    end
